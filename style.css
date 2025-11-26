@@ -1,0 +1,17 @@
+/*
+Theme Name: WR Ecommerce Theme
+Theme URI: https://example.com/wr-ecommerce-theme
+Author: WebRiver
+Author URI: https://example.com
+Description: A clean and modern ecommerce-focused WordPress theme with a hero spotlight, product grid, and promotional callouts.
+Version: 1.0.0
+Text Domain: wr-ecommerce-theme
+*/
+
+/* Theme styles are enqueued from assets/css/style.css. This file contains minimal fallbacks. */
+body {
+    margin: 0;
+    background: #f8fafc;
+    color: #111827;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
