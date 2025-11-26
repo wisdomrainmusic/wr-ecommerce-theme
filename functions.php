@@ -188,3 +188,64 @@ function wr_shop_loader() {
 }
 add_action( 'wp_enqueue_scripts', 'wr_shop_loader' );
 
+
+/* -------------------------------------------------------
+ * 9. WR SINGLE PRODUCT LOADER
+ * ------------------------------------------------------*/
+function wr_single_product_loader() {
+
+    // Renderer
+    $file = get_template_directory() . '/inc/woocommerce/single-render.php';
+    if ( file_exists( $file ) ) {
+        require_once $file;
+    }
+
+    // CSS
+    wp_enqueue_style(
+        'wr-single-style',
+        get_template_directory_uri() . '/assets/css/single.css',
+        array(),
+        '1.0'
+    );
+
+    // JS
+    wp_enqueue_script(
+        'wr-single-js',
+        get_template_directory_uri() . '/assets/js/single.js',
+        array( 'jquery' ),
+        '1.0',
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'wr_single_product_loader' );
+
+
+/* -------------------------------------------------------
+ * 10. WR MINI CART SYSTEM LOADER
+ * ------------------------------------------------------*/
+function wr_mini_cart_system_loader() {
+
+    $file = get_template_directory() . '/inc/woocommerce/mini-cart-render.php';
+    if ( file_exists( $file ) ) {
+        require_once $file;
+    }
+
+    // CSS
+    wp_enqueue_style(
+        'wr-mini-cart-style',
+        get_template_directory_uri() . '/assets/css/mini-cart.css',
+        array(),
+        '1.0'
+    );
+
+    // JS
+    wp_enqueue_script(
+        'wr-mini-cart-js',
+        get_template_directory_uri() . '/assets/js/mini-cart.js',
+        array( 'jquery' ),
+        '1.0',
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'wr_mini_cart_system_loader' );
+

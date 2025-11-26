@@ -1,10 +1,10 @@
 <?php
 /**
- * WR Mini Cart (empty init template)
+ * WR Mini Cart Template Override
  */
+
 defined( 'ABSPATH' ) || exit;
 
-?>
-<div class="wr-mini-cart-empty">
-    Mini cart will be loaded here.
-</div>
+if ( function_exists( 'wr_mini_cart_markup' ) ) {
+    wr_mini_cart_markup();
+}
