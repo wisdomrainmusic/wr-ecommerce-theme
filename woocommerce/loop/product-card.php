@@ -29,6 +29,10 @@ global $product;
             <?php woocommerce_template_loop_add_to_cart(); ?>
         </div>
 
+        <button class="wr-quick-view-btn" data-id="<?php echo $product->get_id(); ?>">
+            Quick View
+        </button>
+
         <?php do_action( 'wr_quick_view_button' ); ?>
     </div>
 </div>
