@@ -1,0 +1,29 @@
+/* WR Single Product - Layout v1 */
+
+.wr-single-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.wr-single-title {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.wr-single-price {
+    font-size: 24px;
+    color: #28a745;
+    margin-top: 10px;
+}
+
+.wr-single-desc {
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.wr-single-atc {
+    margin-top: 20px;
+}
