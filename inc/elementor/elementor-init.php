@@ -1,41 +1,27 @@
 <?php
 /**
- * Elementor Base Compatibility for WR Theme
- * @package WR_Ecommerce_Theme
+ * WR Elementor Compatibility Init (SAFE VERSION)
+ * Compatible with Elementor 3.20+
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
- * 1. Elementor'un WR Theme ile uyumluluğunu bildirme
+ * Load Elementor safely.
  */
-function wr_elementor_compatible_theme() {
-    add_theme_support( 'elementor' );
-    add_theme_support( 'elementor-pro' );
-}
-add_action( 'after_setup_theme', 'wr_elementor_compatible_theme' );
+function wr_elementor_init() {
 
+    // Elementor yoksa devam etme
+    if ( ! did_action( 'elementor/loaded' ) ) {
+        return;
+    }
 
-/**
- * 2. Elementor Breakpoints (Responsive ayarları)
- */
-function wr_elementor_responsive_settings() {
-    if ( did_action( 'elementor/loaded' ) ) {
-        \Elementor\Core\Settings\Manager::get_settings_managers( 'page' )
-            ->get_model()
-            ->update_settings( array(
-                'elementor_container_width' => 1140,
-                'elementor_space_between_widgets' => 20,
-            ) );
+    // Breakpoints veya özel ayar EKSİK İSE model kullanmıyoruz
+    // Çünkü update_settings() artık kullanılmıyor.
+
+    // Sadece log basalım (debug)
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        error_log( 'WR Elementor Init Loaded (SAFE VERSION)' );
     }
 }
-add_action( 'init', 'wr_elementor_responsive_settings' );
-
-
-/**
- * 3. Elementor Canvas uyumluluğu
- */
-add_theme_support( 'elementor-canvas' );
-
+add_action( 'init', 'wr_elementor_init' );
