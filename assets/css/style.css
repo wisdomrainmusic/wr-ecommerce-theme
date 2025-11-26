@@ -313,3 +313,41 @@ img {
         display: inline-flex;
     }
 }
+/* Mini Cart Basic Styling */
+.wr-mini-cart {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.wr-cart-icon {
+    text-decoration: none;
+    font-size: 18px;
+    position: relative;
+}
+
+.wr-cart-count {
+    background: #ff3c78;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 12px;
+    vertical-align: middle;
+    margin-left: 3px;
+}
+
+.wr-mini-cart-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    width: 300px;
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 15px;
+    z-index: 9999;
+}
+
+.wr-mini-cart:hover .wr-mini-cart-dropdown {
+    display: block;
+}
