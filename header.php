@@ -37,6 +37,12 @@ declare( strict_types=1 );
             )
         );
         ?>
+        <?php
+        // Add mini cart to header
+        if ( function_exists( 'wr_get_mini_cart' ) ) {
+            wr_get_mini_cart();
+        }
+        ?>
     </div>
 </header>
 <main class="site-main">

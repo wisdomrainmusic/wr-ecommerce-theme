@@ -249,3 +249,20 @@ function wr_mini_cart_system_loader() {
 }
 add_action( 'wp_enqueue_scripts', 'wr_mini_cart_system_loader' );
 
+/**
+ * Load Mini Cart component
+ */
+require_once get_template_directory() . '/inc/woocommerce/mini-cart.php';
+
+/**
+ * Enable WooCommerce AJAX cart fragments
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', 'wr_ajax_cart_fragments' );
+function wr_ajax_cart_fragments( $fragments ) {
+    ob_start();
+    ?>
+    <span class="wr-cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+    <?php
+    $fragments['.wr-cart-count'] = ob_get_clean();
+    return $fragments;
+}
