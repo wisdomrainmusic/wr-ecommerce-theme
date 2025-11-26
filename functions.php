@@ -126,3 +126,34 @@ function wr_elementor_loader() {
 }
 add_action( 'after_setup_theme', 'wr_elementor_loader' );
 
+
+// -------------------------------------------------------
+// 7. WR THEME PANEL - ADMIN SCRIPTS & STYLES
+// -------------------------------------------------------
+function wr_theme_admin_assets($hook) {
+
+    // Sadece bizim panel için yükle
+    if ( $hook !== 'toplevel_page_wr-theme-panel' ) {
+        return;
+    }
+
+    // CSS
+    wp_enqueue_style(
+        'wr-theme-admin',
+        get_template_directory_uri() . '/assets/admin/css/admin.css',
+        array(),
+        '1.0'
+    );
+
+    // JS
+    wp_enqueue_script(
+        'wr-theme-admin',
+        get_template_directory_uri() . '/assets/admin/js/admin.js',
+        array( 'jquery' ),
+        '1.0',
+        true
+    );
+
+}
+add_action( 'admin_enqueue_scripts', 'wr_theme_admin_assets' );
+
