@@ -1,0 +1,32 @@
+/* WR Shop Grid - Initial Structure */
+
+.wr-shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 22px;
+}
+
+.wr-product-card {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    padding: 18px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.wr-product-title a {
+    color: #111;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.wr-product-price {
+    margin-top: 8px;
+    font-size: 15px;
+    color: #28a745;
+}
+
+.wr-add-to-cart {
+    margin-top: 12px;
+}

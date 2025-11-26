@@ -157,3 +157,34 @@ function wr_theme_admin_assets($hook) {
 }
 add_action( 'admin_enqueue_scripts', 'wr_theme_admin_assets' );
 
+
+/* -------------------------------------------------------
+ * 8. Load WR Shop Renderer + Shop CSS/JS
+ * ------------------------------------------------------*/
+function wr_shop_loader() {
+
+    // Renderer
+    $renderer = get_template_directory() . '/inc/woocommerce/shop-render.php';
+    if ( file_exists( $renderer ) ) {
+        require_once $renderer;
+    }
+
+    // CSS
+    wp_enqueue_style(
+        'wr-shop-style',
+        get_template_directory_uri() . '/assets/css/shop.css',
+        array(),
+        '1.0'
+    );
+
+    // JS
+    wp_enqueue_script(
+        'wr-shop-js',
+        get_template_directory_uri() . '/assets/js/shop.js',
+        array( 'jquery' ),
+        '1.0',
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'wr_shop_loader' );
+
