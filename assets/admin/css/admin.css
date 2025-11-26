@@ -1,0 +1,21 @@
+/* WR Theme Panel - Admin Styles */
+
+.wrap h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.wr-panel-box {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.wr-panel-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
