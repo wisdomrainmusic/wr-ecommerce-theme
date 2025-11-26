@@ -286,27 +286,17 @@ function wr_ajax_cart_fragments( $fragments ) {
  * ------------------------------------------------------*/
 function wr_product_card_styles_loader() {
 
-    if ( function_exists( 'is_woocommerce' ) ) {
-
-        if ( is_shop() || is_product_taxonomy() || is_product() ) {
-            wp_enqueue_style(
-                'wr-product-card',
-                get_template_directory_uri() . '/assets/css/product-card.css',
-                array(),
-                '1.0'
-            );
-        }
+    // Admin tarafında gerek yok
+    if ( is_admin() ) {
+        return;
     }
 
-    // Gutenberg Woo blocks için: her sayfada lazım olabilir
-    if ( function_exists( 'has_block' ) && ( has_block( 'woocommerce/all-products' ) || has_block( 'woocommerce/product-category' ) ) ) {
-        wp_enqueue_style(
-            'wr-product-card',
-            get_template_directory_uri() . '/assets/css/product-card.css',
-            array(),
-            '1.0'
-        );
-    }
+    wp_enqueue_style(
+        'wr-product-card',
+        get_template_directory_uri() . '/assets/css/product-card.css',
+        array(),
+        '1.1'
+    );
 }
-add_action( 'wp_enqueue_scripts', 'wr_product_card_styles_loader' );
+add_action( 'wp_enqueue_scripts', 'wr_product_card_styles_loader', 20 );
 
