@@ -24,8 +24,11 @@ global $product;
         <?php echo $product->get_price_html(); ?>
     </div>
 
-    <!-- Add to cart button -->
-    <div class="wr-add-to-cart">
-        <?php woocommerce_template_loop_add_to_cart(); ?>
+    <div class="wr-product-actions">
+        <div class="wr-add-to-cart">
+            <?php woocommerce_template_loop_add_to_cart(); ?>
+        </div>
+
+        <?php do_action( 'wr_quick_view_button' ); ?>
     </div>
 </div>

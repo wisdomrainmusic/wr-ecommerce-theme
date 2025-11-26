@@ -258,6 +258,20 @@ require_once get_template_directory() . '/inc/woocommerce/mini-cart.php';
  * Enable WooCommerce AJAX cart fragments
  */
 add_filter( 'woocommerce_add_to_cart_fragments', 'wr_ajax_cart_fragments' );
+
+
+/* -------------------------------------------------------
+ * 11. WR QUICK VIEW LOADER
+ * ------------------------------------------------------*/
+function wr_quick_view_loader() {
+
+    $file = get_template_directory() . '/inc/woocommerce/quick-view.php';
+
+    if ( file_exists( $file ) ) {
+        require_once $file;
+    }
+}
+add_action( 'after_setup_theme', 'wr_quick_view_loader' );
 function wr_ajax_cart_fragments( $fragments ) {
     ob_start();
     ?>
