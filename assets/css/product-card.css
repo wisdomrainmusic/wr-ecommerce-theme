@@ -160,3 +160,48 @@
         gap: 16px;
     }
 }
+
+/* ----------------------------------------
+ * WR Product Card – Action Buttons Alignment
+ * ------------------------------------- */
+
+.wr-product-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* Woo Add to Cart button normalize */
+.wr-product-actions .wr-add-to-cart .button {
+    background: #e9e7ee;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #444;
+    text-align: center;
+    transition: 0.2s;
+    box-shadow: none;
+}
+
+.wr-product-actions .wr-add-to-cart .button:hover {
+    background: #d8d5dc;
+}
+
+/* WR Quick View button */
+.wr-product-actions .wr-quick-view-btn {
+    padding: 12px 22px;
+    border-radius: 8px;
+    background: #0d1117;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.wr-product-actions .wr-quick-view-btn:hover {
+    opacity: 0.85;
+}
