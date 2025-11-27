@@ -11,6 +11,9 @@ if ( ! class_exists( 'WooCommerce' ) ) {
     return;
 }
 
+// Eskiden loop’tan Quick View butonu basıyordu — artık product-card.php basıyor
+// add_action( 'woocommerce_after_shop_loop_item', 'wr_quick_view_button' );
+
 class WR_Quick_View {
 
     public function __construct() {
