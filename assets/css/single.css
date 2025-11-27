@@ -27,3 +27,42 @@
 .wr-single-atc {
     margin-top: 20px;
 }
+
+/* ----------------------------------------
+ * Related Products – WR kart grid uyumu
+ * ------------------------------------- */
+
+.wr-related-products-section {
+    margin-top: 60px;
+}
+
+.wr-related-products-section .wr-related-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+/* WooCommerce ul.products için grid yapısı */
+.wr-related-products-section .products {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+}
+
+@media (max-width: 1200px) {
+    .wr-related-products-section .products {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .wr-related-products-section .products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .wr-related-products-section .products {
+        grid-template-columns: 1fr;
+    }
+}
