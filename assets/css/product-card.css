@@ -205,3 +205,21 @@
 .wr-product-actions .wr-quick-view-btn:hover {
     opacity: 0.85;
 }
+
+/* ----------------------------------------
+ * Pixel Perfect – Action Button Alignment
+ * Ensures Add to Cart & Quick View are perfectly aligned
+ * ------------------------------------- */
+
+.wr-product-actions .wr-add-to-cart .button,
+.wr-product-actions .wr-quick-view-btn {
+    padding: 14px 24px !important;
+    line-height: 1 !important;
+    font-size: 16px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    box-sizing: border-box;
+}
+
