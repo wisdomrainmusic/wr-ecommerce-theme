@@ -32,7 +32,5 @@ global $product;
         <button class="wr-quick-view-btn" data-id="<?php echo $product->get_id(); ?>">
             Quick View
         </button>
-
-        <?php do_action( 'wr_quick_view_button' ); ?>
     </div>
 </div>
