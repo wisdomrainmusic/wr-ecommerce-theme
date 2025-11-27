@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------
-   WR Product Card v1 - Shop, archives, related, blocks
+   WR Product Card v1 - Shop, Archives, Related, Blocks
 -------------------------------------------------------------- */
 
 /* Genel ürün grid wrapper'ı */
@@ -36,12 +36,10 @@
 .woocommerce ul.products li.product:hover,
 .woocommerce-page ul.products li.product:hover,
 .wc-block-grid__products .wc-block-grid__product:hover {
-    box-shadow: 0 14px 32px rgba(0,0,0,0.08);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
     transform: translateY(-3px);
     border-color: #dedede;
 }
-
-/* -------- Görsel oranı (override kullansak da kullanmasak da) -------- */
 
 /* Woo klasik loop img */
 .woocommerce ul.products li.product a img,
@@ -52,7 +50,7 @@
     display: block;
 }
 
-/* Wrapper: klasik markup'ta <a> link'i wrapper olarak kullanıyoruz */
+/* Görsel ratio wrapper */
 .woocommerce ul.products li.product a.woocommerce-LoopProduct-link,
 .woocommerce-page ul.products li.product a.woocommerce-LoopProduct-link {
     position: relative;
@@ -60,27 +58,27 @@
     overflow: hidden;
 }
 
-/* Sabit oran: 4:5 kitap kapağı hissi */
 .woocommerce ul.products li.product a.woocommerce-LoopProduct-link::before,
-.woocommerce-page ul.products li.product a.woocommerce-LoopProduct-link::before {
+.woocommerce ul.products li.product a.woocommerce-LoopProduct-link::before {
     content: "";
     display: block;
     padding-top: 130%; /* 4:5 oran */
 }
 
-.woocommerce ul.products li.product a.woocommerce-LoopProduct-link img,
-.woocommerce-page ul.products li.product a.woocommerce-LoopProduct-link img {
+.woocommerce ul.products li.product a.woocommerce-LoopProduct-link img {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* Eğer bizim özel wrapper'ımız varsa (content-product override) */
+/* WR özel thumb */
 .wr-product-thumb-ratio {
     position: relative;
     padding-top: 130%;
     overflow: hidden;
 }
-
 .wr-product-thumb-ratio img {
     position: absolute;
     inset: 0;
@@ -89,62 +87,40 @@
     object-fit: cover;
 }
 
-/* -------- İçerik alanı -------- */
-
+/* İçerik alanı */
 .woocommerce ul.products li.product .woocommerce-loop-product__title,
-.woocommerce-page ul.products li.product .woocommerce-loop-product__title,
-.wc-block-grid__product-title {
+.woocommerce-page ul.products li.product .woocommerce-loop-product__title {
     font-size: 15px;
     font-weight: 600;
     margin: 12px 16px 4px;
 }
 
-.woocommerce ul.products li.product .woocommerce-loop-product__title a,
-.woocommerce-page ul.products li.product .woocommerce-loop-product__title a,
-.wc-block-grid__product-title a {
+.woocommerce ul.products li.product .woocommerce-loop-product__title a {
     color: #111;
     text-decoration: none;
 }
 
-.woocommerce ul.products li.product .woocommerce-loop-product__title a:hover,
-.woocommerce-page ul.products li.product .woocommerce-loop-product__title a:hover,
-.wc-block-grid__product-title a:hover {
+.woocommerce ul.products li.product .woocommerce-loop-product__title a:hover {
     color: #5a3fff;
 }
 
-/* Fiyat + rating satırı */
+/* Fiyat */
 .woocommerce ul.products li.product .price,
-.woocommerce-page ul.products li.product .price,
-.wc-block-grid__product-price {
+.woocommerce-page ul.products li.product .price {
     margin: 0 16px 0;
     font-size: 16px;
     font-weight: 600;
     color: #16a34a;
 }
 
-/* Add to cart buton */
-.woocommerce ul.products li.product .button,
-.woocommerce-page ul.products li.product .button,
-.wc-block-grid__product-add-to-cart .wp-block-button__link {
-    margin: 10px 16px 16px;
-    width: calc(100% - 32px);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 10px;
-    font-size: 13px;
-    border-radius: 999px;
-}
-
-/* Rating biraz küçülsün */
+/* Rating */
 .woocommerce ul.products li.product .star-rating,
 .woocommerce-page ul.products li.product .star-rating {
     margin: 4px 16px 0;
     font-size: 10px;
 }
 
-/* -------- Related / Upsells / Cross-sells -------- */
-
+/* Related / Upsells / Cross-sells */
 .woocommerce .related ul.products,
 .woocommerce .upsells ul.products,
 .woocommerce .cross-sells ul.products {
@@ -161,65 +137,46 @@
     }
 }
 
-/* ----------------------------------------
- * WR Product Card – Action Buttons Alignment
- * ------------------------------------- */
+/* --------------------------------------------------------------
+   WR Product Card – Custom Actions (Add to Cart + Quick View)
+-------------------------------------------------------------- */
 
 .wr-product-actions {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 16px;
+    margin: 20px 0 24px 0;
 }
 
-/* Woo Add to Cart button normalize */
+/* Add to Cart normalize */
 .wr-product-actions .wr-add-to-cart .button {
-    background: #e9e7ee;
-    padding: 12px 22px;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #444;
-    text-align: center;
-    transition: 0.2s;
-    box-shadow: none;
+    background: #e9e7ee !important;
+    color: #444 !important;
+    border: none !important;
 }
 
-.wr-product-actions .wr-add-to-cart .button:hover {
-    background: #d8d5dc;
-}
-
-/* WR Quick View button */
+/* Quick View button */
 .wr-product-actions .wr-quick-view-btn {
-    padding: 12px 22px;
-    border-radius: 8px;
     background: #0d1117;
     color: #fff;
-    font-weight: 600;
     border: none;
     cursor: pointer;
-    text-align: center;
-    transition: 0.2s;
 }
 
-.wr-product-actions .wr-quick-view-btn:hover {
-    opacity: 0.85;
-}
-
-/* ----------------------------------------
- * Pixel Perfect – Action Button Alignment
- * Ensures Add to Cart & Quick View are perfectly aligned
- * ------------------------------------- */
+/* --------------------------------------------------------------
+   Pixel Perfect Alignment — FINAL
+-------------------------------------------------------------- */
 
 .wr-product-actions .wr-add-to-cart .button,
 .wr-product-actions .wr-quick-view-btn {
-    padding: 14px 24px !important;
-    line-height: 1 !important;
-    font-size: 16px !important;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
+    height: 52px !important;
+    padding: 0 28px !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    border-radius: 14px;
     box-sizing: border-box;
 }
-
