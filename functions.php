@@ -8,6 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// -----------------------------
+// WooCommerce Blocks devre dışı (çift buton/quick view fix)
+// -----------------------------
+add_filter( 'woocommerce_blocks_use_blockified_product_grid', '__return_false' );
+
 /**
  * -------------------------------------------------------
  * 1. THEME SETUP
