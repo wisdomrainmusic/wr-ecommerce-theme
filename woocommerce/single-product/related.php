@@ -1,65 +1,35 @@
 <?php
 /**
- * Related products
- *
- * @package WR_Ecommerce_Theme
+ * Related Products Template (WR Theme — Clean Version)
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Exit if accessed directly.
-}
+defined( 'ABSPATH' ) || exit;
 
-if ( empty( $related_products ) ) {
-    return;
-}
+if ( $related_products ) : ?>
 
-/**
- * Başlık filtresi Woo standart akışına uyuyor.
- */
-$heading = apply_filters(
-    'woocommerce_product_related_products_heading',
-    __( 'Related products', 'wr-theme' )
-);
-?>
+    <section class="related products">
 
-<section class="wr-related-products-section">
-    <?php if ( $heading ) : ?>
-        <h2 class="wr-related-title">
-            <?php echo esc_html( $heading ); ?>
-        </h2>
-    <?php endif; ?>
+        <h2><?php esc_html_e( 'Related products', 'woocommerce' ); ?></h2>
 
-    <?php woocommerce_product_loop_start(); ?>
+        <?php woocommerce_product_loop_start(); ?>
 
-    <?php foreach ( $related_products as $related_product ) : ?>
-        <?php
-        $post_object = get_post( $related_product->get_id() );
+            <?php foreach ( $related_products as $related_product ) : ?>
 
-        if ( ! $post_object ) {
-            continue;
-        }
+                <?php
+                $post_object = get_post( $related_product->get_id() );
 
-        // Woo loop context
-        $GLOBALS['post'] = $post_object; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-        setup_postdata( $GLOBALS['post'] );
-        ?>
+                setup_postdata( $GLOBALS['post'] =& $post_object );
 
-        <li <?php wc_product_class( 'wr-related-product-item', $related_product ); ?>>
-            <?php
-            /**
-             * Burada direkt WR kartı kullanıyoruz:
-             * woocommerce/loop/product-card.php
-             * Böylece shop/archive ile aynı kart HTML yapısı korunuyor.
-             */
-            wc_get_template( 'loop/product-card.php' );
-            ?>
-        </li>
+                wc_get_template_part( 'content', 'product' );
+                ?>
 
-    <?php endforeach; ?>
+            <?php endforeach; ?>
 
-    <?php woocommerce_product_loop_end(); ?>
-</section>
+        <?php woocommerce_product_loop_end(); ?>
+
+    </section>
 
 <?php
-// Loop global’ini eski haline getir.
+endif;
+
 wp_reset_postdata();
