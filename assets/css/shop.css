@@ -1,32 +1,126 @@
-/* WR Shop Grid - Initial Structure */
+/* --------------------------------------------------------------
+   WR Product Card - MASTER GRID SYSTEM
+   Shop, Archives, Related
+-------------------------------------------------------------- */
 
-.wr-shop-grid {
+/* Ana grid yapısı (shop, archive, related hepsi) */
+.wr-shop-grid,
+.wr-related-products-section .wr-related-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 22px;
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
+/* Kart gövdesi */
 .wr-product-card {
     background: #fff;
     border: 1px solid #e6e6e6;
-    padding: 18px;
-    border-radius: 6px;
+    border-radius: 12px;
+    padding: 16px;
     text-align: center;
+    transition: 0.2s ease;
 }
 
+.wr-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+}
+
+/* Ürün görseli */
+.wr-product-thumb {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.wr-product-thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Başlık */
 .wr-product-title a {
     color: #111;
     text-decoration: none;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
+    display: block;
+    margin-top: 12px;
 }
 
+/* Fiyat */
 .wr-product-price {
     margin-top: 8px;
     font-size: 15px;
     color: #28a745;
+    font-weight: 600;
 }
 
-.wr-add-to-cart {
-    margin-top: 12px;
+/* --------------------------------------------------------------
+   Actions (Add to Cart + Quick View)
+-------------------------------------------------------------- */
+
+.wr-product-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+/* Tek tip buton */
+.wr-product-actions .wr-add-to-cart .button,
+.wr-product-actions .wr-quick-view-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1;
+    height: 48px;
+    padding: 0 22px !important;
+    border-radius: 10px;
+    background: #0d1117 !important;
+    color: #fff !important;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none !important;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* WooCommerce default reset */
+.wr-product-actions .wr-add-to-cart .button {
+    all: unset !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    height: 48px !important;
+    padding: 0 22px !important;
+    border-radius: 10px !important;
+    background: #0d1117 !important;
+    color: #fff !important;
+    font-size: 15px !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+}
+
+/* Hover */
+.wr-product-actions .wr-add-to-cart .button:hover,
+.wr-product-actions .wr-quick-view-btn:hover {
+    opacity: 0.9;
+}
+
+/* --------------------------------------------------------------
+   Related ürünler liste elemanı
+-------------------------------------------------------------- */
+
+.wr-related-products-section .wr-related-item {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }

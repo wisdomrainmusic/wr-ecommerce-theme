@@ -1,182 +1,228 @@
 /* --------------------------------------------------------------
-   WR Product Card v1 - Shop, Archives, Related, Blocks
+   RESET for Related (WooCommerce Default Loop)
 -------------------------------------------------------------- */
 
-/* Genel ürün grid wrapper'ı */
-.woocommerce ul.products,
-.woocommerce-page ul.products,
-.wc-block-grid__products {
+/* Restore default Woo grid on single product */
+.single-product .woocommerce ul.products,
+.single-product .woocommerce-page ul.products {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0 !important;
+    padding: 0;
+    margin: 0 0 32px;
+}
+
+/* Prevent WR card override inside related */
+.single-product .woocommerce ul.products li.product {
+    width: 30% !important;
+    margin: 0 1.5% 30px !important;
+    float: none !important;
+    list-style: none;
+}
+
+
+/* --------------------------------------------------------------
+   WR PRODUCT CARD — GLOBAL GRID (SHOP + CATEGORY)
+-------------------------------------------------------------- */
+
+body:not(.single-product) .woocommerce ul.products,
+body:not(.single-product) .woocommerce-page ul.products,
+body:not(.single-product) .wc-block-grid__products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
     gap: 24px;
     padding: 0;
     margin: 0 0 32px;
 }
 
-/* Liste elemanı reset */
-.woocommerce ul.products li.product,
-.woocommerce-page ul.products li.product,
-.wc-block-grid__products .wc-block-grid__product {
+/* Wrapping <li> */
+.woocommerce ul.products li.product {
     list-style: none;
-}
-
-/* Kart gövdesi */
-.woocommerce ul.products li.product,
-.woocommerce-page ul.products li.product,
-.wc-block-grid__products .wc-block-grid__product {
     background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #ececec;
+    border-radius: 14px;
+    border: 1px solid #e6e6e6;
     overflow: hidden;
+    position: relative; /* <-- wishlist için gerekli */
     display: flex;
     flex-direction: column;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    transition: 0.2s ease-in-out;
 }
 
-.woocommerce ul.products li.product:hover,
-.woocommerce-page ul.products li.product:hover,
-.wc-block-grid__products .wc-block-grid__product:hover {
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
-    transform: translateY(-3px);
-    border-color: #dedede;
+.woocommerce ul.products li.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 10px 28px rgba(0,0,0,0.08);
 }
 
-/* Woo klasik loop img */
-.woocommerce ul.products li.product a img,
-.woocommerce-page ul.products li.product a img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
 
-/* Görsel ratio wrapper */
-.woocommerce ul.products li.product a.woocommerce-LoopProduct-link,
-.woocommerce-page ul.products li.product a.woocommerce-LoopProduct-link {
-    position: relative;
-    display: block;
-    overflow: hidden;
-}
+/* --------------------------------------------------------------
+   WISHLIST BUTTON (TOP RIGHT)
+-------------------------------------------------------------- */
 
-.woocommerce ul.products li.product a.woocommerce-LoopProduct-link::before,
-.woocommerce ul.products li.product a.woocommerce-LoopProduct-link::before {
-    content: "";
-    display: block;
-    padding-top: 130%; /* 4:5 oran */
-}
-
-.woocommerce ul.products li.product a.woocommerce-LoopProduct-link img {
+.wr-wishlist-btn {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.2s ease;
 }
 
-/* WR özel thumb */
+.wr-wishlist-btn:hover {
+    background: #fff4f6;
+    border-color: #ff4e73;
+}
+
+.wr-wishlist-btn.active {
+    background: #ff4e73;
+    border-color: #ff4e73;
+}
+
+.wr-wishlist-icon {
+    width: 18px;
+    height: 18px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('../img/icon-heart.svg');
+}
+
+.wr-wishlist-btn.active .wr-wishlist-icon {
+    background-image: url('../img/icon-heart-fill.svg');
+}
+
+
+/* --------------------------------------------------------------
+   PRODUCT THUMBNAIL
+-------------------------------------------------------------- */
+
+.wr-product-thumb-wrap {
+    display: block;
+    width: 100%;
+}
+
 .wr-product-thumb-ratio {
     position: relative;
-    padding-top: 130%;
+    width: 100%;
+    padding-top: 60%;
     overflow: hidden;
 }
+
 .wr-product-thumb-ratio img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-/* İçerik alanı */
-.woocommerce ul.products li.product .woocommerce-loop-product__title,
-.woocommerce-page ul.products li.product .woocommerce-loop-product__title {
-    font-size: 15px;
+
+/* --------------------------------------------------------------
+   PRODUCT CONTENT
+-------------------------------------------------------------- */
+
+.wr-product-content {
+    padding: 16px 16px 0;
+    text-align: center;
+}
+
+.wr-product-title {
+    margin: 12px 0 6px;
+}
+
+.wr-product-title a {
+    font-size: 17px;
     font-weight: 600;
-    margin: 12px 16px 4px;
-}
-
-.woocommerce ul.products li.product .woocommerce-loop-product__title a {
     color: #111;
     text-decoration: none;
 }
 
-.woocommerce ul.products li.product .woocommerce-loop-product__title a:hover {
-    color: #5a3fff;
+.wr-product-price-rating {
+    margin-bottom: 18px;
 }
 
-/* Fiyat */
-.woocommerce ul.products li.product .price,
-.woocommerce-page ul.products li.product .price {
-    margin: 0 16px 0;
+.wr-product-price-rating .price {
+    color: #16a34a;
     font-size: 16px;
     font-weight: 600;
-    color: #16a34a;
 }
 
-/* Rating */
-.woocommerce ul.products li.product .star-rating,
-.woocommerce-page ul.products li.product .star-rating {
-    margin: 4px 16px 0;
-    font-size: 10px;
-}
-
-/* Related / Upsells / Cross-sells */
-.woocommerce .related ul.products,
-.woocommerce .upsells ul.products,
-.woocommerce .cross-sells ul.products {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-}
-
-/* Mobil optimizasyon */
-@media (max-width: 600px) {
-    .woocommerce ul.products,
-    .woocommerce-page ul.products,
-    .wc-block-grid__products {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-    }
-}
 
 /* --------------------------------------------------------------
-   WR Product Card – Custom Actions (Add to Cart + Quick View)
+   ACTION BUTTONS — PERFECTLY ALIGNED
 -------------------------------------------------------------- */
 
 .wr-product-actions {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 16px;
-    margin: 20px 0 24px 0;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 16px 22px;
+    margin-top: auto;
 }
 
-/* Add to Cart normalize */
-.wr-product-actions .wr-add-to-cart .button {
-    background: #e9e7ee !important;
-    color: #444 !important;
-    border: none !important;
-}
-
-/* Quick View button */
+.wr-product-actions .wr-add-to-cart,
 .wr-product-actions .wr-quick-view-btn {
-    background: #0d1117;
-    color: #fff;
-    border: none;
+    flex: 1 1 50%;
+}
+
+/* ADD TO CART + QUICK VIEW Unified Look */
+.wr-product-actions .wr-add-to-cart .button,
+.wr-product-actions .wr-quick-view-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 48px !important;
+    padding: 0 20px !important;
+    font-size: 15px !important;
+    border-radius: 12px !important;
+    background: #0d1117 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border: none !important;
+    box-sizing: border-box !important;
     cursor: pointer;
 }
 
+.wr-product-actions .wr-add-to-cart .button:hover,
+.wr-product-actions .wr-quick-view-btn:hover {
+    opacity: 0.88;
+}
+
+
 /* --------------------------------------------------------------
-   Pixel Perfect Alignment — FINAL
+   RESPONSIVE
 -------------------------------------------------------------- */
 
-.wr-product-actions .wr-add-to-cart .button,
-.wr-product-actions .wr-quick-view-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 52px !important;
-    padding: 0 28px !important;
-    font-size: 16px !important;
-    line-height: 1 !important;
-    border-radius: 14px;
-    box-sizing: border-box;
+@media (max-width: 600px) {
+
+    body:not(.single-product) .woocommerce ul.products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .wr-product-actions {
+        padding: 0 10px 18px;
+        gap: 10px;
+    }
+
+    .wr-product-actions .wr-add-to-cart .button,
+    .wr-product-actions .wr-quick-view-btn {
+        height: 44px !important;
+        font-size: 14px !important;
+    }
+
+    .wr-wishlist-btn {
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+    }
 }
