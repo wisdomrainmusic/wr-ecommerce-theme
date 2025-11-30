@@ -41,7 +41,6 @@ function wr_theme_setup() {
 
     // WooCommerce support
     add_theme_support( 'woocommerce' );
-
 }
 add_action( 'after_setup_theme', 'wr_theme_setup' );
 
@@ -81,14 +80,14 @@ add_action( 'wp_enqueue_scripts', 'wr_theme_assets' );
 function wr_elementor_support() {
     add_theme_support( 'elementor' );
     add_theme_support( 'elementor-pro' );
-    add_theme_support( 'e-commerce' ); // future-proof
+    add_theme_support( 'e-commerce' );
 }
 add_action( 'after_setup_theme', 'wr_elementor_support' );
 
 
 /**
  * -------------------------------------------------------
- * 4. WR THEME PANEL LOADER (boş yapı)
+ * 4. WR THEME PANEL LOADER
  * -------------------------------------------------------
  */
 function wr_theme_panel_loader() {
@@ -98,7 +97,6 @@ function wr_theme_panel_loader() {
     if ( file_exists( $admin_panel ) ) {
         require_once $admin_panel;
     }
-
 }
 add_action( 'init', 'wr_theme_panel_loader' );
 
@@ -133,16 +131,14 @@ add_action( 'after_setup_theme', 'wr_elementor_loader' );
 
 
 // -------------------------------------------------------
-// 7. WR THEME PANEL - ADMIN SCRIPTS & STYLES
+// 7. WR THEME PANEL ADMIN SCRIPTS & STYLES
 // -------------------------------------------------------
 function wr_theme_admin_assets($hook) {
 
-    // Sadece bizim panel için yükle
     if ( $hook !== 'toplevel_page_wr-theme-panel' ) {
         return;
     }
 
-    // CSS
     wp_enqueue_style(
         'wr-theme-admin',
         get_template_directory_uri() . '/assets/admin/css/admin.css',
@@ -150,7 +146,6 @@ function wr_theme_admin_assets($hook) {
         '1.0'
     );
 
-    // JS
     wp_enqueue_script(
         'wr-theme-admin',
         get_template_directory_uri() . '/assets/admin/js/admin.js',
@@ -158,23 +153,20 @@ function wr_theme_admin_assets($hook) {
         '1.0',
         true
     );
-
 }
 add_action( 'admin_enqueue_scripts', 'wr_theme_admin_assets' );
 
 
 /* -------------------------------------------------------
- * 8. Load WR Shop Renderer + Shop CSS/JS
+ * 8. WR SHOP RENDERER + Shop CSS/JS
  * ------------------------------------------------------*/
 function wr_shop_loader() {
 
-    // Renderer
     $renderer = get_template_directory() . '/inc/woocommerce/shop-render.php';
     if ( file_exists( $renderer ) ) {
         require_once $renderer;
     }
 
-    // CSS
     wp_enqueue_style(
         'wr-shop-style',
         get_template_directory_uri() . '/assets/css/shop.css',
@@ -182,7 +174,6 @@ function wr_shop_loader() {
         '1.0'
     );
 
-    // JS
     wp_enqueue_script(
         'wr-shop-js',
         get_template_directory_uri() . '/assets/js/shop.js',
@@ -199,13 +190,11 @@ add_action( 'wp_enqueue_scripts', 'wr_shop_loader' );
  * ------------------------------------------------------*/
 function wr_single_product_loader() {
 
-    // Renderer
     $file = get_template_directory() . '/inc/woocommerce/single-render.php';
     if ( file_exists( $file ) ) {
         require_once $file;
     }
 
-    // CSS
     wp_enqueue_style(
         'wr-single-style',
         get_template_directory_uri() . '/assets/css/single.css',
@@ -213,7 +202,6 @@ function wr_single_product_loader() {
         '1.0'
     );
 
-    // JS
     wp_enqueue_script(
         'wr-single-js',
         get_template_directory_uri() . '/assets/js/single.js',
@@ -235,7 +223,6 @@ function wr_mini_cart_system_loader() {
         require_once $file;
     }
 
-    // CSS
     wp_enqueue_style(
         'wr-mini-cart-style',
         get_template_directory_uri() . '/assets/css/mini-cart.css',
@@ -243,7 +230,6 @@ function wr_mini_cart_system_loader() {
         '1.0'
     );
 
-    // JS
     wp_enqueue_script(
         'wr-mini-cart-js',
         get_template_directory_uri() . '/assets/js/mini-cart.js',
@@ -254,15 +240,18 @@ function wr_mini_cart_system_loader() {
 }
 add_action( 'wp_enqueue_scripts', 'wr_mini_cart_system_loader' );
 
-/**
- * Load Mini Cart component
- */
 require_once get_template_directory() . '/inc/woocommerce/mini-cart.php';
 
-/**
- * Enable WooCommerce AJAX cart fragments
- */
 add_filter( 'woocommerce_add_to_cart_fragments', 'wr_ajax_cart_fragments' );
+
+function wr_ajax_cart_fragments( $fragments ) {
+    ob_start();
+    ?>
+    <span class="wr-cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+    <?php
+    $fragments['.wr-cart-count'] = ob_get_clean();
+    return $fragments;
+}
 
 
 /* -------------------------------------------------------
@@ -277,21 +266,13 @@ function wr_quick_view_loader() {
     }
 }
 add_action( 'after_setup_theme', 'wr_quick_view_loader' );
-function wr_ajax_cart_fragments( $fragments ) {
-    ob_start();
-    ?>
-    <span class="wr-cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
-    <?php
-    $fragments['.wr-cart-count'] = ob_get_clean();
-    return $fragments;
-}
+
 
 /* -------------------------------------------------------
- * 11. WR PRODUCT CARD STYLES
+ * 12. WR PRODUCT CARD STYLES
  * ------------------------------------------------------*/
 function wr_product_card_styles_loader() {
 
-    // Admin tarafında gerek yok
     if ( is_admin() ) {
         return;
     }
@@ -305,3 +286,27 @@ function wr_product_card_styles_loader() {
 }
 add_action( 'wp_enqueue_scripts', 'wr_product_card_styles_loader', 20 );
 
+
+/* -------------------------------------------------------
+ * 13. OVERRIDE – WooCommerce Product Loop → WR CARD
+ * ------------------------------------------------------*/
+add_filter( 'wc_get_template', 'wr_override_product_loop_template', 10, 5 );
+
+function wr_override_product_loop_template( $located, $template_name, $args, $template_path, $default_path ) {
+
+    $target = array(
+        'content-product.php',
+        'loop/content-product.php'
+    );
+
+    if ( in_array( $template_name, $target, true ) ) {
+
+        $custom = get_template_directory() . '/woocommerce/loop/product-card.php';
+
+        if ( file_exists( $custom ) ) {
+            return $custom;
+        }
+    }
+
+    return $located;
+}
