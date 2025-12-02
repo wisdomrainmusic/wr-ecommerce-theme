@@ -326,6 +326,11 @@ class WR_HB_Manager {
     }
 }
 
+// Provide a namespaced alias for new code paths.
+if ( ! class_exists( 'WR_Theme\\Header_Builder\\WR_HB_Manager' ) ) {
+    class_alias( 'WR_HB_Manager', 'WR_Theme\\Header_Builder\\WR_HB_Manager' );
+}
+
 /**
  * Global helper to get Header Builder manager instance.
  */

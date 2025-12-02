@@ -1,175 +1,105 @@
 <?php
 /**
- * WR Header Builder Admin.
+ * WR Header Builder – Admin bootstrap.
+ *
+ * @package WR_Ecommerce_Theme
  */
+
+namespace WR_Theme\Header_Builder;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 class WR_HB_Admin {
+
     /**
-     * Menu slug.
+     * Singleton.
      *
-     * @var string
+     * @var WR_HB_Admin
      */
-    protected $slug = 'wr-header-builder';
+    protected static $instance;
 
     /**
-     * Singleton instance.
-     *
-     * @var WR_HB_Admin|null
+     * Get instance.
      */
-    protected static $instance = null;
-
-    /**
-     * Manager instance.
-     *
-     * @var WR_HB_Manager
-     */
-    protected $manager;
-
-    /**
-     * Constructor.
-     */
-    protected function __construct() {
-        $this->manager = WR_HB_Manager::get_instance();
-    }
-
-    /**
-     * Singleton accessor.
-     */
-    public static function get_instance(): WR_HB_Admin {
-        if ( null === self::$instance ) {
-            self::$instance = new self();
+    public static function get_instance() {
+        if ( null === static::$instance ) {
+            static::$instance = new static();
         }
-
-        return self::$instance;
+        return static::$instance;
     }
 
     /**
-     * Initialize hooks.
+     * Init hooks.
      */
-    public function init(): void {
+    public function init() {
         add_action( 'admin_menu', [ $this, 'register_menu' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
     }
 
     /**
-     * Register admin page.
+     * Register admin menu page.
      */
-    public function register_menu(): void {
+    public function register_menu() {
         add_menu_page(
-            __( 'WR Header Builder', 'wr-ecommerce-theme' ),
+            __( 'Header Builder', 'wr-ecommerce-theme' ),
             __( 'Header Builder', 'wr-ecommerce-theme' ),
             'manage_options',
-            $this->slug,
+            'wr-header-builder',
             [ $this, 'render_page' ],
-            'dashicons-editor-table',
+            'dashicons-editor-kitchensink',
             59
         );
     }
 
     /**
-     * Enqueue assets for builder page.
+     * Enqueue scripts/styles on builder page.
+     *
+     * @param string $hook Current admin hook.
      */
-    public function enqueue_assets( string $hook ): void {
-        if ( 'toplevel_page_' . $this->slug !== $hook ) {
+    public function enqueue_assets( $hook ) {
+        if ( 'toplevel_page_wr-header-builder' !== $hook ) {
             return;
         }
 
-        $nonce            = wp_create_nonce( 'wr_hb_nonce' );
-        $active_layout_id = $this->manager->get_active_layout_id();
-        $layout           = $this->manager->get_layout( $active_layout_id );
-
-        wp_enqueue_style(
-            'wr-hb-admin',
-            get_theme_file_uri( '/assets/css/wr-hb-admin.css' ),
-            [],
-            $this->manager->get_version()
-        );
-
+        // SortableJS (bundled or theme asset).
         wp_enqueue_script(
             'sortablejs',
-            get_theme_file_uri( '/assets/header-builder/js/sortable.min.js' ),
+            get_template_directory_uri() . '/assets/header-builder/js/sortable.min.js',
             [],
             '1.15.0',
             true
         );
 
-        wp_enqueue_script(
+        // Admin JS.
+        wp_register_script(
             'wr-hb-admin',
-            get_theme_file_uri( '/assets/js/wr-hb-admin.js' ),
-            [ 'jquery', 'sortablejs' ],
-            $this->manager->get_version(),
+            get_template_directory_uri() . '/assets/js/wr-hb-admin.js',
+            [ 'jquery', 'sortablejs', 'wp-util' ],
+            '1.0.0',
             true
         );
 
-        wp_localize_script(
+        // Admin CSS.
+        wp_enqueue_style(
             'wr-hb-admin',
-            'wrHbAdminData',
-            [
-                'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-                'nonce'        => $nonce,
-                'layoutId'     => $active_layout_id,
-                'layout'       => $layout,
-            ]
+            get_template_directory_uri() . '/assets/css/wr-hb-admin.css',
+            [],
+            '1.0.0'
         );
     }
 
     /**
      * Render admin page.
      */
-    public function render_page(): void {
-        $nonce            = wp_create_nonce( 'wr_hb_nonce' );
-        $active_layout_id = $this->manager->get_active_layout_id();
-        $layout           = $this->manager->get_layout( $active_layout_id );
-
-        $widgets   = $this->get_available_widgets();
-        $view_path = get_theme_file_path( 'inc/header-builder/views/admin-page-header-builder.php' );
-
-        if ( file_exists( $view_path ) ) {
-            include $view_path;
+    public function render_page() {
+        $view = get_template_directory() . '/inc/header-builder/views/admin-page-header-builder.php';
+        if ( file_exists( $view ) ) {
+            include $view;
         }
     }
-
-    /**
-     * Widget list.
-     */
-    protected function get_available_widgets(): array {
-        return [
-            'logo'           => [
-                'label'            => __( 'Logo', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'primary-menu'   => [
-                'label'            => __( 'Primary Menu', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'secondary-menu' => [
-                'label'            => __( 'Secondary Menu', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'search'         => [
-                'label'            => __( 'Search', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'cart'           => [
-                'label'            => __( 'Cart', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'button'         => [
-                'label'            => __( 'Button', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'html'           => [
-                'label'            => __( 'HTML', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-            'shortcode'      => [
-                'label'            => __( 'Shortcode', 'wr-ecommerce-theme' ),
-                'default_settings' => [],
-            ],
-        ];
-    }
 }
+
+// Maintain backwards compatibility with non-namespaced references.
+class_alias( __NAMESPACE__ . '\\WR_HB_Admin', 'WR_HB_Admin' );
