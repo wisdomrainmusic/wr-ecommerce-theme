@@ -409,5 +409,6 @@ render = function () {
 
     });
 
+    initDragDrop();
 };
 

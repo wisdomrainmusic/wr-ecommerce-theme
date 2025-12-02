@@ -23,8 +23,27 @@ class WR_Header_Builder {
     }
 
     public function admin_assets() {
-        wp_enqueue_style( 'wr-hb-admin', get_theme_file_uri( '/assets/header-builder/css/admin.css' ) );
-        wp_enqueue_script( 'wr-hb-admin', get_theme_file_uri( '/assets/header-builder/js/admin.js' ), ['jquery'], false, true );
+        wp_enqueue_style(
+            'wr-hb-admin',
+            get_theme_file_uri( '/assets/header-builder/css/admin.css' )
+        );
+
+        // SORTABLEJS (Drag & Drop için şart)
+        wp_enqueue_script(
+            'wr-sortable',
+            get_theme_file_uri( '/assets/header-builder/js/sortable.min.js' ),
+            [],
+            false,
+            true
+        );
+
+        wp_enqueue_script(
+            'wr-hb-admin',
+            get_theme_file_uri( '/assets/header-builder/js/admin.js' ),
+            [ 'jquery', 'wr-sortable' ],
+            false,
+            true
+        );
     }
 
     public function frontend_assets() {
