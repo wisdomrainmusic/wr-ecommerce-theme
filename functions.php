@@ -312,10 +312,26 @@ function wr_override_product_loop_template( $located, $template_name, $args, $te
 }
 
 // ==================================================
-// WR HEADER BUILDER LOADER
+// WR HEADER BUILDER LOADER (new architecture)
 // ==================================================
-require_once get_theme_file_path( '/inc/header-builder/class-wr-header-builder.php' );
-require_once get_theme_file_path( '/inc/header-builder/admin/class-wr-header-admin.php' );
-require_once get_theme_file_path( '/inc/header-builder/frontend/class-wr-header-render.php' );
+if ( file_exists( get_theme_file_path( '/inc/header-builder/class-wr-hb-manager.php' ) ) ) {
+    require_once get_theme_file_path( '/inc/header-builder/class-wr-hb-manager.php' );
+    require_once get_theme_file_path( '/inc/header-builder/class-wr-hb-render.php' );
+    require_once get_theme_file_path( '/inc/header-builder/class-wr-hb-admin.php' );
+    require_once get_theme_file_path( '/inc/header-builder/class-wr-hb-ajax.php' );
 
-new WR_Header_Builder();
+    add_action( 'after_setup_theme', function() {
+        if ( class_exists( 'WR_HB_Manager' ) ) {
+            WR_HB_Manager::get_instance();
+        }
+
+        if ( class_exists( 'WR_HB_Admin' ) && is_admin() ) {
+            WR_HB_Admin::get_instance()->init();
+            WR_HB_Ajax::get_instance()->init();
+        }
+
+        if ( class_exists( 'WR_HB_Render' ) ) {
+            WR_HB_Render::get_instance()->init();
+        }
+    } );
+}
