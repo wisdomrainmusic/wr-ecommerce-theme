@@ -178,6 +178,78 @@ document.addEventListener('DOMContentLoaded', function () {
         appEl.appendChild(wrapper);
     }
 
+    // -----------------------------------------------------------
+    // Widget Panel (Step 2)
+    // -----------------------------------------------------------
+    function buildWidgetPanel() {
+
+        const panel = document.createElement('div');
+        panel.className = 'wr-hb-widgets-panel';
+
+        const title = document.createElement('h3');
+        title.className = 'wr-hb-widgets-title';
+        title.textContent = 'Widgets';
+
+        const list = document.createElement('div');
+        list.className = 'wr-hb-widget-list';
+
+        const widgets = [
+            { type: 'logo', label: 'Logo' },
+            { type: 'menu', label: 'Menu' },
+            { type: 'search', label: 'Search' },
+            { type: 'cart', label: 'Cart' },
+            { type: 'account', label: 'Account' },
+            { type: 'button', label: 'Button' },
+            { type: 'html', label: 'HTML Block' },
+            { type: 'spacer', label: 'Spacer' }
+        ];
+
+        widgets.forEach(w => {
+            const item = document.createElement('div');
+            item.className = 'wr-hb-widget-item';
+            item.textContent = w.label;
+            item.dataset.widget = w.type;
+
+            // ileride Sortable.drag handle olarak kullanılacak
+            item.setAttribute('draggable', 'true');
+
+            list.appendChild(item);
+        });
+
+        panel.appendChild(title);
+        panel.appendChild(list);
+
+        return panel;
+    }
+
+    // Render fonksiyonuna panel ekleme
+    const originalRender = render;
+    render = function () {
+        appEl.innerHTML = '';
+
+        // Ana layout container (2 kolon: builder + panel)
+        const layoutWrapper = document.createElement('div');
+        layoutWrapper.className = 'wr-hb-layout';
+
+        // Sol taraf: Orijinal builder UI
+        const builderWrapper = document.createElement('div');
+        builderWrapper.className = 'wr-hb-builder-container';
+
+        originalRender.call(null);
+
+        // builder içeriğini appEl'den al
+        builderWrapper.append(...appEl.childNodes);
+
+        // yeni layout içine koy
+        appEl.innerHTML = '';
+        layoutWrapper.appendChild(builderWrapper);
+
+        // sağ taraf: widget panel
+        layoutWrapper.appendChild(buildWidgetPanel());
+
+        appEl.appendChild(layoutWrapper);
+    };
+
     // Init
     loadInitialLayout();
 });
