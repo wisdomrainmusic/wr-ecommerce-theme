@@ -3,6 +3,13 @@
 (function ($) {
     'use strict';
 
+    // Global sanity check – drag çalışmıyorsa ilk bakılacak yer burası.
+    if (typeof Sortable === 'undefined') {
+        console.error('[WR HB] SortableJS not found. Drag & drop disabled.');
+        return;
+    }
+
+
     const WRHB = {
         init() {
             this.cache();
@@ -110,6 +117,8 @@
                 sort: false,
                 animation: 150
             });
+
+            this.$widgetList.find('.wr-hb-widget-card').css('cursor', 'move');
         },
 
         addRow(rowData) {

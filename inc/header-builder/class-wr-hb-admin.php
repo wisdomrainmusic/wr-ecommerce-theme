@@ -62,15 +62,33 @@ class WR_HB_Admin {
         if ( 'toplevel_page_wr-header-builder' !== $hook ) {
             return;
         }
+        /**
+         * SortableJS (bundled or CDN fallback).
+         *
+         * Bazı ortamlarda eski header builder refaktör edilirken
+         * sortable.min.js başka klasöre taşınmış olabilir.
+         * Önce tema içi dosyayı deneriz, yoksa CDN’den yükleriz.
+         */
+        $sortable_src = '';
+        $sortable_rel = '/assets/header-builder/js/sortable.min.js';
 
-        // SortableJS (bundled or theme asset).
+        if ( file_exists( get_template_directory() . $sortable_rel ) ) {
+            $sortable_src = get_template_directory_uri() . $sortable_rel;
+        } else {
+            // Güvenli fallback – sadece admin’de kullanıyoruz.
+            $sortable_src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js';
+        }
+
         wp_enqueue_script(
             'sortablejs',
-            get_template_directory_uri() . '/assets/header-builder/js/sortable.min.js',
+            $sortable_src,
             [],
             '1.15.0',
             true
         );
+
+        // jQuery garanti olsun diye.
+        wp_enqueue_script( 'jquery' );
 
         // Admin JS.
         wp_register_script(
