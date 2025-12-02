@@ -1,1 +1,124 @@
-/* Header Builder Admin CSS */
+/* -----------------------------------------
+   WR Header Builder – Admin UI (Step 1)
+   Row + Column scaffold only
+------------------------------------------ */
+
+.wr-hb-wrapper {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px 16px;
+    background: #ffffff;
+    margin-top: 8px;
+}
+
+.wr-hb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.wr-hb-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.wr-hb-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.wr-hb-btn {
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.wr-hb-btn:hover {
+    background: #edf2ff;
+    border-color: #6366f1;
+}
+
+.wr-hb-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wr-hb-row {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px 10px 8px;
+    background: #f9fafb;
+}
+
+.wr-hb-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.wr-hb-row-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #4b5563;
+}
+
+.wr-hb-row-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.wr-hb-row-btn {
+    border: none;
+    background: transparent;
+    font-size: 11px;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0;
+}
+
+.wr-hb-row-btn:hover {
+    color: #ef4444;
+}
+
+.wr-hb-row-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.wr-hb-col {
+    min-height: 60px;
+    border-radius: 4px;
+    border: 1px dashed #d1d5db;
+    background: #ffffff;
+    padding: 8px;
+    font-size: 11px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.wr-hb-col-label {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+}
+
+/* Şimdilik widget yok, sadece placeholder */
+.wr-hb-empty-helper {
+    font-size: 11px;
+    margin-top: 6px;
+    color: #9ca3af;
+}
