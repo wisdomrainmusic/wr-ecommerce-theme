@@ -310,3 +310,12 @@ function wr_override_product_loop_template( $located, $template_name, $args, $te
 
     return $located;
 }
+
+// ==================================================
+// WR HEADER BUILDER LOADER
+// ==================================================
+require_once get_theme_file_path( '/inc/header-builder/class-wr-header-builder.php' );
+require_once get_theme_file_path( '/inc/header-builder/admin/class-wr-header-admin.php' );
+require_once get_theme_file_path( '/inc/header-builder/frontend/class-wr-header-render.php' );
+
+new WR_Header_Builder();
