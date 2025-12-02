@@ -169,3 +169,34 @@
     background: #edf2ff;
     border-color: #6366f1;
 }
+
+/* Widget cards inside columns */
+.wr-hb-widget-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.wr-hb-widget-card-label {
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.wr-hb-widget-card-remove {
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.wr-hb-sort-ghost {
+    opacity: 0.4;
+}

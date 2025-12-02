@@ -253,3 +253,161 @@ document.addEventListener('DOMContentLoaded', function () {
     // Init
     loadInitialLayout();
 });
+
+// -----------------------------------------------------------
+// DRAG & DROP (Step 3)
+// -----------------------------------------------------------
+
+function initDragDrop() {
+
+    // 1) Widget panelinden sürükleme
+    document.querySelectorAll('.wr-hb-widget-item').forEach(item => {
+
+        item.addEventListener('dragstart', function (e) {
+            e.dataTransfer.effectAllowed = "copy";
+            e.dataTransfer.setData('widget-type', item.dataset.widget);
+
+            // Ghost görseli
+            const clone = item.cloneNode(true);
+            clone.style.opacity = '0.5';
+            document.body.appendChild(clone);
+            e.dataTransfer.setDragImage(clone, 50, 20);
+
+            setTimeout(() => {
+                document.body.removeChild(clone);
+            }, 10);
+        });
+
+    });
+
+    // 2) Her kolon Sortable droppable olacak
+    document.querySelectorAll('.wr-hb-col').forEach(col => {
+
+        const rowId = col.closest('.wr-hb-row').dataset.rowId;
+        const area  = col.classList.contains('wr-hb-col-left') ? 'left' :
+                      col.classList.contains('wr-hb-col-center') ? 'center' :
+                      'right';
+
+        // Sortable instance
+        new Sortable(col, {
+            group: {
+                name: 'wr-hb',
+                pull: false,
+                put: true
+            },
+            animation: 150,
+            ghostClass: 'wr-hb-sort-ghost',
+
+            onAdd: function (evt) {
+                const widgetType = evt.item.dataset.widget;
+
+                // Remove temporary element & replace with widget card
+                evt.item.remove();
+
+                addWidgetToColumn(rowId, area, widgetType);
+                render();
+                syncHiddenInput();
+                initDragDrop();
+            }
+        });
+    });
+}
+
+
+// -----------------------------------------------------------
+// Widget Kartı oluşturma
+// -----------------------------------------------------------
+function createWidgetCard(widget) {
+    const el = document.createElement('div');
+    el.className = 'wr-hb-widget-card';
+    el.dataset.widget = widget.type;
+
+    const label = document.createElement('span');
+    label.className = 'wr-hb-widget-card-label';
+    label.textContent = widget.type.toUpperCase();
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'wr-hb-widget-card-remove';
+    removeBtn.textContent = '×';
+
+    removeBtn.addEventListener('click', function () {
+        removeWidgetFromLayout(widget.__rowId, widget.__area, widget.__index);
+        render();
+        syncHiddenInput();
+        initDragDrop();
+    });
+
+    el.appendChild(label);
+    el.appendChild(removeBtn);
+
+    return el;
+}
+
+
+// -----------------------------------------------------------
+// JSON: Widget ekleme
+// -----------------------------------------------------------
+function addWidgetToColumn(rowId, area, type) {
+    layout = layout.map(row => {
+        if (row.id === rowId) {
+            row[area].push({
+                type: type,
+                settings: {}
+            });
+        }
+        return row;
+    });
+}
+
+
+// -----------------------------------------------------------
+// JSON: Widget silme
+// -----------------------------------------------------------
+function removeWidgetFromLayout(rowId, area, index) {
+    layout = layout.map(row => {
+        if (row.id === rowId) {
+            row[area].splice(index, 1);
+        }
+        return row;
+    });
+}
+
+
+// -----------------------------------------------------------
+// RENDER override: widget kartlarını kolonlara yerleştir
+// -----------------------------------------------------------
+const oldRender = render;
+
+render = function () {
+
+    oldRender();
+
+    // widget kartlarını kolonlara ekleyelim
+    layout.forEach(row => {
+
+        const rowEl = document.querySelector(`.wr-hb-row[data-row-id="${row.id}"]`);
+        if (!rowEl) return;
+
+        ['left', 'center', 'right'].forEach(area => {
+
+            const colEl = rowEl.querySelector(`.wr-hb-col-${area}`);
+            if (!colEl) return;
+
+            // etiketi kaldırıyoruz
+            colEl.innerHTML = '';
+
+            row[area].forEach((widget, index) => {
+                widget.__rowId = row.id;
+                widget.__area  = area;
+                widget.__index = index;
+
+                const card = createWidgetCard(widget);
+                colEl.appendChild(card);
+            });
+        });
+
+    });
+
+};
+
