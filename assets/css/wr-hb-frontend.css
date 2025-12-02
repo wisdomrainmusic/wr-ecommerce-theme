@@ -1,0 +1,135 @@
+.wr-hb-header {
+    width: 100%;
+    background: #ffffff;
+    padding: 16px 24px;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.wr-hb-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.wr-hb-row:last-child {
+    margin-bottom: 0;
+}
+
+.wr-hb-col {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-height: 40px;
+    overflow: hidden;
+}
+
+.wr-hb-widget {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wr-hb-widget--menu .wr-hb-menu,
+.wr-hb-widget--primary-menu .wr-hb-menu,
+.wr-hb-widget--secondary-menu .wr-hb-menu {
+    display: flex;
+    gap: 14px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.wr-hb-logo__text {
+    font-weight: 700;
+    font-size: 18px;
+    color: #111827;
+    text-decoration: none;
+}
+
+.wr-hb-search form {
+    display: flex;
+    gap: 8px;
+}
+
+.wr-hb-search input[type="search"] {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+}
+
+.wr-hb-search input[type="submit"],
+.wr-hb-search button[type="submit"] {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: none;
+    background: #111827;
+    color: #fff;
+    cursor: pointer;
+}
+
+.wr-hb-cart {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #111827;
+    position: relative;
+}
+
+.wr-hb-cart__count {
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111827;
+    color: #fff;
+    border-radius: 999px;
+    font-size: 12px;
+    padding: 0 6px;
+}
+
+.wr-hb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background: #111827;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.wr-hb-btn:hover {
+    background: #000;
+}
+
+@media (max-width: 768px) {
+    .wr-hb-header {
+        padding: 12px 16px;
+    }
+
+    .wr-hb-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .wr-hb-col {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .wr-hb-widget--menu .wr-hb-menu,
+    .wr-hb-widget--primary-menu .wr-hb-menu,
+    .wr-hb-widget--secondary-menu .wr-hb-menu {
+        flex-wrap: wrap;
+    }
+}

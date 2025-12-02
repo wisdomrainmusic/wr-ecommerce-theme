@@ -60,7 +60,7 @@ class WR_HB_Render {
     public function enqueue(): void {
         wp_enqueue_style(
             'wr-hb-frontend',
-            get_theme_file_uri( '/assets/header-builder/css/builder-frontend.css' ),
+            get_theme_file_uri( '/assets/css/wr-hb-frontend.css' ),
             [],
             $this->manager->get_version()
         );
@@ -78,77 +78,99 @@ class WR_HB_Render {
      * Render header layout.
      */
     public function output_header(): void {
-        $active_layout_id = $this->manager->get_active_layout_id();
-        $layout           = $this->manager->get_layout( $active_layout_id ?? 'layout-desktop' );
-        $device           = $layout['device'] ?? 'desktop';
+        $layout_id = $this->manager->get_active_layout_id();
+
+        if ( ! $layout_id ) {
+            return;
+        }
+
+        $layout = $this->manager->get_layout( $layout_id );
 
         if ( empty( $layout['rows'] ) || ! is_array( $layout['rows'] ) ) {
             return;
         }
 
-        echo '<header class="wr-hb wr-hb-device-' . esc_attr( $device ) . '"><div class="wr-hb-container">';
+        $device = $layout['device'] ?? 'desktop';
 
-        foreach ( $layout['rows'] as $row ) {
-            echo '<div class="wr-hb-row" data-row-id="' . esc_attr( $row['id'] ) . '">';
-            echo '<div class="wr-hb-row-inner">';
+        echo '<header class="wr-hb-header">';
 
-            if ( ! empty( $row['columns'] ) ) {
+        $rows = $layout['rows'];
+
+        usort(
+            $rows,
+            static function ( $a, $b ) {
+                return (int) ( $a['order'] ?? 0 ) <=> (int) ( $b['order'] ?? 0 );
+            }
+        );
+
+        foreach ( $rows as $row ) {
+            $row_id = $row['id'] ?? '';
+
+            echo '<div class="wr-hb-row" data-row-id="' . esc_attr( $row_id ) . '">';
+
+            $columns = is_array( $row['columns'] ?? null ) ? $row['columns'] : [];
+
+            usort(
+                $columns,
+                static function ( $a, $b ) {
+                    return (int) ( $a['order'] ?? 0 ) <=> (int) ( $b['order'] ?? 0 );
+                }
+            );
+
+            foreach ( $columns as $column ) {
+                $column_id = $column['id'] ?? '';
+                $col_width = $column['width'] ?? '';
+                $col_device = $column['device'] ?? $device;
+                $style      = $col_width ? ' style="width:' . esc_attr( $col_width ) . '"' : '';
+
+                echo '<div class="wr-hb-col wr-hb-col--' . esc_attr( $col_device ) . '" data-column-id="' . esc_attr( $column_id ) . '"' . $style . '>';
+
+                $widgets = is_array( $column['widgets'] ?? null ) ? $column['widgets'] : [];
+
                 usort(
-                    $row['columns'],
+                    $widgets,
                     static function ( $a, $b ) {
                         return (int) ( $a['order'] ?? 0 ) <=> (int) ( $b['order'] ?? 0 );
                     }
                 );
 
-                foreach ( $row['columns'] as $column ) {
-                    $width = isset( $column['width'] ) ? $column['width'] : '33%';
-                    echo '<div class="wr-hb-column" style="width:' . esc_attr( $width ) . '" data-column-id="' . esc_attr( $column['id'] ) . '">';
-                    echo '<div class="wr-hb-widget-stack">';
-
-                    if ( ! empty( $column['widgets'] ) ) {
-                        usort(
-                            $column['widgets'],
-                            static function ( $a, $b ) {
-                                return (int) ( $a['order'] ?? 0 ) <=> (int) ( $b['order'] ?? 0 );
-                            }
-                        );
-
-                        foreach ( $column['widgets'] as $widget ) {
-                            $this->render_widget( $widget );
-                        }
-                    }
-
-                    echo '</div>';
-                    echo '</div>';
+                foreach ( $widgets as $widget ) {
+                    $this->render_widget( $widget );
                 }
+
+                echo '</div>';
             }
 
             echo '</div>';
-            echo '</div>';
         }
 
-        echo '</div></header>';
+        echo '</header>';
     }
 
     /**
      * Render individual widget types.
      */
     protected function render_widget( array $widget ): void {
-        $type     = $widget['type'] ?? 'html';
-        $settings = $widget['settings'] ?? [];
+        $type        = $widget['type'] ?? 'html';
+        $settings    = $widget['settings'] ?? [];
+        $widget_id   = $widget['id'] ?? '';
+        $button_url  = isset( $settings['url'] ) ? esc_url( $settings['url'] ) : esc_url( home_url( '/' ) );
+        $button_text = $settings['label'] ?? __( 'Button', 'wr-ecommerce-theme' );
 
         ob_start();
 
-        echo '<div class="wr-hb-widget-item wr-hb-widget-' . esc_attr( $type ) . '" data-widget-id="' . esc_attr( $widget['id'] ?? '' ) . '">';
+        echo '<div class="wr-hb-widget wr-hb-widget--' . esc_attr( $type ) . '" data-widget-id="' . esc_attr( $widget_id ) . '">';
 
         switch ( $type ) {
             case 'logo':
-                echo '<div class="wr-hb-logo">';
+                echo '<div class="wr-hb-widget__logo">';
+
                 if ( has_custom_logo() ) {
-                    the_custom_logo();
+                    echo wp_kses_post( get_custom_logo() );
                 } else {
                     echo '<a class="wr-hb-logo__text" href="' . esc_url( home_url( '/' ) ) . '">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
                 }
+
                 echo '</div>';
                 break;
 
@@ -164,26 +186,21 @@ class WR_HB_Render {
                 break;
 
             case 'search':
-                get_search_form();
+                echo '<div class="wr-hb-search">' . get_search_form( false ) . '</div>';
                 break;
 
             case 'cart':
-                if ( function_exists( 'wr_get_mini_cart' ) ) {
-                    wr_get_mini_cart();
-                } elseif ( function_exists( 'woocommerce_mini_cart' ) ) {
-                    woocommerce_mini_cart();
+                if ( class_exists( 'WooCommerce' ) && function_exists( 'WC' ) && WC()->cart ) {
+                    $count = (int) WC()->cart->get_cart_contents_count();
+                    echo '<a class="wr-hb-cart" href="' . esc_url( wc_get_cart_url() ) . '" aria-label="' . esc_attr__( 'View cart', 'wr-ecommerce-theme' ) . '">';
+                    echo '<span class="wr-hb-cart__icon" aria-hidden="true">🛒</span>';
+                    echo '<span class="wr-hb-cart__count">' . esc_html( $count ) . '</span>';
+                    echo '</a>';
                 }
                 break;
 
             case 'button':
-                $label = $settings['label'] ?? __( 'Button', 'wr-ecommerce-theme' );
-                $url   = $settings['url'] ?? home_url( '/' );
-                echo '<a class="wr-hb-button" href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
-                break;
-
-            case 'spacer':
-                $height = $settings['height'] ?? '20px';
-                echo '<div class="wr-hb-spacer" style="height:' . esc_attr( $height ) . ';"></div>';
+                echo '<a class="wr-hb-btn" href="' . $button_url . '">' . esc_html( $button_text ) . '</a>';
                 break;
 
             case 'shortcode':
@@ -193,7 +210,7 @@ class WR_HB_Render {
 
             case 'html':
             default:
-                $content = $settings['content'] ?? __( 'Custom HTML', 'wr-ecommerce-theme' );
+                $content = $settings['content'] ?? '';
                 echo '<div class="wr-hb-html">' . wp_kses_post( $content ) . '</div>';
                 break;
         }
