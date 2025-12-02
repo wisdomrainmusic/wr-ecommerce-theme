@@ -1,6 +1,13 @@
 <?php
 /**
  * WR Header Builder Manager
+ *
+ * Basit manuel doğrulama akışı (PHP yorum olarak saklandı):
+ * 1. "Yeni layout" oluştur ve ad olarak "Test Header" gir.
+ * 2. 3 adet row ekle; ilkine logo, ikincisine menu, üçüncüsüne search + cart widget'larını yerleştir.
+ * 3. Kaydet ve admin başlık ön izlemesinde satırların doğru sırada olduğunu doğrula.
+ * 4. Aktif layout olarak yeni kaydı seçip "Publish/Save" işlemini tamamla.
+ * 5. Front-end'de sayfayı ziyaret ederek logo, menü, arama ve sepetin sırasıyla göründüğünü kontrol et.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
