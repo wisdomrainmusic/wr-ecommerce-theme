@@ -40,7 +40,7 @@
             settings: {},
             columns: [
                 { id: uid('col'), order: 1, width: '25%', settings: {}, widgets: [{ id: uid('wg'), type: 'logo', order: 1, settings: {} }] },
-                { id: uid('col'), order: 2, width: '50%', settings: {}, widgets: [{ id: uid('wg'), type: 'menu', order: 1, settings: {} }] },
+                { id: uid('col'), order: 2, width: '50%', settings: {}, widgets: [{ id: uid('wg'), type: 'primary-menu', order: 1, settings: {} }] },
                 { id: uid('col'), order: 3, width: '25%', settings: {}, widgets: [{ id: uid('wg'), type: 'cart', order: 1, settings: {} }] },
             ],
         };
@@ -48,7 +48,7 @@
 
     function render() {
         const layout = ensureLayout(state.device);
-        const $canvas = $('#wr-hb-canvas');
+        const $canvas = $('#wr-hb-rows');
         $canvas.empty();
 
         layout.rows
@@ -115,7 +115,7 @@
     }
 
     function createWidgetChip(type, id) {
-        const label = $(`#wr-hb-widget-library .wr-hb-widget[data-type="${type}"] .wr-hb-widget-label`).text() || type;
+        const label = $(`#wr-hb-widget-list [data-widget-type="${type}"] .wr-hb-widget-card__label`).text() || type;
         const $chip = $('<div class="wr-hb-widget-chip" />')
             .attr('data-type', type)
             .attr('data-id', id || uid('wg'))
@@ -131,7 +131,7 @@
     }
 
     function bindWidgetLibrary() {
-        const library = document.getElementById('wr-hb-widget-library');
+        const library = document.getElementById('wr-hb-widget-list');
         if (library && !library.dataset.sortableBound) {
             library.dataset.sortableBound = '1';
             Sortable.create(library, {
@@ -168,7 +168,7 @@
 
     function collectLayout() {
         const rows = [];
-        $('#wr-hb-canvas .wr-hb-row').each(function (rIndex) {
+        $('#wr-hb-rows .wr-hb-row').each(function (rIndex) {
             const $row = $(this);
             const row = {
                 id: $row.data('id') || uid('row'),
@@ -233,9 +233,15 @@
             });
     }
 
+    function resetLayout() {
+        state.layouts[state.device] = {};
+        render();
+    }
+
     function bindEvents() {
         $('#wr-hb-add-row').on('click', addRow);
         $('#wr-hb-save-layout').on('click', saveLayout);
+        $('#wr-hb-reset-layout').on('click', resetLayout);
 
         $('.wr-hb-device-switch .button').on('click', function () {
             $('.wr-hb-device-switch .button').removeClass('active');

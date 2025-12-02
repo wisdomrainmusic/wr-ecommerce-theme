@@ -78,16 +78,20 @@ class WR_HB_Admin {
             return;
         }
 
+        $nonce            = wp_create_nonce( 'wr_hb_nonce' );
+        $active_layout_id = $this->manager->get_active_layout_id();
+        $layout           = $this->manager->get_layout( $active_layout_id );
+
         wp_enqueue_style(
             'wr-hb-admin',
-            get_theme_file_uri( '/assets/header-builder/css/builder-admin.css' ),
+            get_theme_file_uri( '/assets/css/wr-hb-admin.css' ),
             [],
             $this->manager->get_version()
         );
 
         wp_enqueue_script(
             'sortablejs',
-            'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js',
+            get_theme_file_uri( '/assets/header-builder/js/sortable.min.js' ),
             [],
             '1.15.0',
             true
@@ -95,7 +99,7 @@ class WR_HB_Admin {
 
         wp_enqueue_script(
             'wr-hb-admin',
-            get_theme_file_uri( '/assets/header-builder/js/builder-admin.js' ),
+            get_theme_file_uri( '/assets/js/wr-hb-admin.js' ),
             [ 'jquery', 'sortablejs' ],
             $this->manager->get_version(),
             true
@@ -103,16 +107,12 @@ class WR_HB_Admin {
 
         wp_localize_script(
             'wr-hb-admin',
-            'wrHbData',
+            'wrHbAdminData',
             [
                 'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-                'nonce'        => wp_create_nonce( 'wr_hb_nonce' ),
-                'layouts'      => $this->manager->get_layouts(),
-                'activeLayout' => $this->manager->get_active_layout_id(),
-                'i18n'         => [
-                    'saveSuccess' => __( 'Header layout saved.', 'wr-ecommerce-theme' ),
-                    'saveError'   => __( 'Unable to save layout. Please try again.', 'wr-ecommerce-theme' ),
-                ],
+                'nonce'        => $nonce,
+                'layoutId'     => $active_layout_id,
+                'layout'       => $layout,
             ]
         );
     }
@@ -123,45 +123,14 @@ class WR_HB_Admin {
     public function render_page(): void {
         $nonce            = wp_create_nonce( 'wr_hb_nonce' );
         $active_layout_id = $this->manager->get_active_layout_id();
-        ?>
-        <div class="wrap wr-hb-admin">
-            <h1><?php esc_html_e( 'WR Header Builder', 'wr-ecommerce-theme' ); ?></h1>
-            <input type="hidden" id="wr-hb-nonce" value="<?php echo esc_attr( $nonce ); ?>" />
-            <div id="wr-hb-app" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-active-layout="<?php echo esc_attr( $active_layout_id ); ?>">
-                <div class="wr-hb-panel">
-                    <div class="wr-hb-toolbar">
-                        <div class="wr-hb-device-switch">
-                            <button type="button" class="button button-secondary active" data-device="desktop"><?php esc_html_e( 'Desktop', 'wr-ecommerce-theme' ); ?></button>
-                            <button type="button" class="button button-secondary" data-device="tablet"><?php esc_html_e( 'Tablet', 'wr-ecommerce-theme' ); ?></button>
-                            <button type="button" class="button button-secondary" data-device="mobile"><?php esc_html_e( 'Mobile', 'wr-ecommerce-theme' ); ?></button>
-                        </div>
-                        <div class="wr-hb-actions">
-                            <button type="button" class="button" id="wr-hb-add-row"><?php esc_html_e( 'Add Row', 'wr-ecommerce-theme' ); ?></button>
-                            <button type="button" class="button button-primary" id="wr-hb-save-layout"><?php esc_html_e( 'Save Layout', 'wr-ecommerce-theme' ); ?></button>
-                        </div>
-                    </div>
+        $layout           = $this->manager->get_layout( $active_layout_id );
 
-                    <div class="wr-hb-builder">
-                        <div class="wr-hb-canvas" id="wr-hb-canvas"></div>
-                        <div class="wr-hb-sidebar">
-                            <h3><?php esc_html_e( 'Widgets', 'wr-ecommerce-theme' ); ?></h3>
-                            <p class="description"><?php esc_html_e( 'Drag items into columns', 'wr-ecommerce-theme' ); ?></p>
-                            <div id="wr-hb-widget-library" class="wr-hb-widget-library">
-                                <?php foreach ( $this->get_available_widgets() as $type => $label ) : ?>
-                                    <div class="wr-hb-widget" data-type="<?php echo esc_attr( $type ); ?>">
-                                        <span class="wr-hb-widget-label"><?php echo esc_html( $label ); ?></span>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="wr-hb-help">
-                                <p><?php esc_html_e( 'Tip: You can reorder rows, columns and widgets freely. Columns support width selection (25% - 100%).', 'wr-ecommerce-theme' ); ?></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php
+        $widgets   = $this->get_available_widgets();
+        $view_path = get_theme_file_path( 'inc/header-builder/views/admin-page-header-builder.php' );
+
+        if ( file_exists( $view_path ) ) {
+            include $view_path;
+        }
     }
 
     /**
@@ -169,13 +138,38 @@ class WR_HB_Admin {
      */
     protected function get_available_widgets(): array {
         return [
-            'logo'   => __( 'Logo', 'wr-ecommerce-theme' ),
-            'menu'   => __( 'Primary Menu', 'wr-ecommerce-theme' ),
-            'search' => __( 'Search', 'wr-ecommerce-theme' ),
-            'cart'   => __( 'Cart', 'wr-ecommerce-theme' ),
-            'button' => __( 'Button', 'wr-ecommerce-theme' ),
-            'html'   => __( 'HTML Block', 'wr-ecommerce-theme' ),
-            'spacer' => __( 'Spacer', 'wr-ecommerce-theme' ),
+            'logo'           => [
+                'label'            => __( 'Logo', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'primary-menu'   => [
+                'label'            => __( 'Primary Menu', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'secondary-menu' => [
+                'label'            => __( 'Secondary Menu', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'search'         => [
+                'label'            => __( 'Search', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'cart'           => [
+                'label'            => __( 'Cart', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'button'         => [
+                'label'            => __( 'Button', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'html'           => [
+                'label'            => __( 'HTML', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
+            'shortcode'      => [
+                'label'            => __( 'Shortcode', 'wr-ecommerce-theme' ),
+                'default_settings' => [],
+            ],
         ];
     }
 }

@@ -72,11 +72,17 @@ class WR_HB_Ajax {
             wp_send_json_error( [ 'message' => __( 'Invalid layout schema', 'wr-ecommerce-theme' ) ], 400 );
         }
 
-        $this->manager->save_layout( $layout_id, $decoded );
+        $saved = $this->manager->save_layout( $layout_id, $decoded );
+
+        if ( ! $saved ) {
+            wp_send_json_error( [ 'message' => __( 'Unable to save layout', 'wr-ecommerce-theme' ) ], 500 );
+        }
+
         $this->manager->set_active_layout_id( $layout_id );
 
         wp_send_json_success(
             [
+                'message'      => __( 'Layout saved.', 'wr-ecommerce-theme' ),
                 'layout'       => $this->manager->get_layout( $layout_id ),
                 'activeLayout' => $this->manager->get_active_layout_id(),
             ]
@@ -99,9 +105,16 @@ class WR_HB_Ajax {
             wp_send_json_error( [ 'message' => __( 'Missing layout id', 'wr-ecommerce-theme' ) ], 400 );
         }
 
+        $layout = $this->manager->get_layout( $layout_id );
+
+        if ( empty( $layout ) ) {
+            wp_send_json_error( [ 'message' => __( 'Layout not found', 'wr-ecommerce-theme' ) ], 404 );
+        }
+
         wp_send_json_success(
             [
-                'layout'       => $this->manager->get_layout( $layout_id ),
+                'message'      => __( 'Layout loaded.', 'wr-ecommerce-theme' ),
+                'layout'       => $layout,
                 'activeLayout' => $this->manager->get_active_layout_id(),
             ]
         );
